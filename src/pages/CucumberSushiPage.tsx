@@ -1,13 +1,18 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import { Clock, Utensils, Users, ChefHat, Printer, BookmarkPlus, Share2 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  Clock, Utensils, Users, ChefHat, Printer, 
+  BookmarkPlus, Share2, ChevronDown, ChevronUp, Play, Pause
+} from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
 
 // Animated ingredient component
-const AnimatedIngredient = ({ name, image }: { name: string, image: string }) => {
+const AnimatedIngredient = ({ name, amount, image }: { name: string; amount: string; image: string }) => {
   return (
     <motion.div 
       className="relative bg-cream rounded-xl overflow-hidden shadow-md mb-4 ingredient-3d"
@@ -26,33 +31,136 @@ const AnimatedIngredient = ({ name, image }: { name: string, image: string }) =>
       </div>
       <div className="p-3 bg-cream">
         <h3 className="text-navy font-medium text-center">{name}</h3>
+        <p className="text-sm text-center text-gray-600">{amount}</p>
       </div>
     </motion.div>
   );
 };
 
 // Step component with animation
-const RecipeStep = ({ number, text }: { number: number, text: string }) => {
+const RecipeStep = ({ 
+  number, 
+  text, 
+  isActive, 
+  onClick 
+}: { 
+  number: number; 
+  text: string; 
+  isActive: boolean; 
+  onClick: () => void;
+}) => {
   return (
     <motion.div 
-      className="flex mb-8"
+      className={`flex mb-8 cursor-pointer ${isActive ? 'bg-sage/10 p-4 rounded-lg' : ''}`}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: number * 0.1 }}
+      onClick={onClick}
     >
-      <div className="bg-terracotta text-white rounded-full w-8 h-8 flex items-center justify-center mt-1 mr-4 flex-shrink-0">
+      <div className={`${isActive ? 'bg-terracotta' : 'bg-gray-300'} text-white rounded-full w-10 h-10 flex items-center justify-center mt-1 mr-4 flex-shrink-0 transition-colors duration-300`}>
         {number}
       </div>
       <div className="pb-6 border-b border-gray-200">
-        <p className="text-lg">{text}</p>
+        <p className={`text-lg ${isActive ? 'font-medium' : ''}`}>{text}</p>
       </div>
     </motion.div>
   );
 };
 
+// Timer component
+const Timer = ({ seconds, isRunning, onToggle, onReset }) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+
+  return (
+    <div className="bg-white p-4 rounded-xl shadow-md flex items-center justify-between mb-6">
+      <div className="flex items-center">
+        <div className="w-12 h-12 rounded-full bg-terracotta flex items-center justify-center mr-4">
+          <Clock className="h-6 w-6 text-white" />
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">Timer</p>
+          <p className="text-2xl font-bold font-playfair">
+            {String(minutes).padStart(2, '0')}:{String(remainingSeconds).padStart(2, '0')}
+          </p>
+        </div>
+      </div>
+      <div className="flex space-x-2">
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="border-terracotta text-terracotta hover:bg-terracotta/5"
+          onClick={onToggle}
+        >
+          {isRunning ? <Pause className="h-4 w-4 mr-1" /> : <Play className="h-4 w-4 mr-1" />}
+          {isRunning ? 'Pause' : 'Start'}
+        </Button>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="border-navy text-navy hover:bg-navy/5"
+          onClick={onReset}
+        >
+          Reset
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+// Cherry blossom animation
+const CherryBlossoms = () => {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {[...Array(20)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-3 h-3 bg-pink-200 rounded-full opacity-70"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `-20px`,
+            scale: 0.5 + Math.random() * 0.5
+          }}
+          animate={{
+            y: `${window.innerHeight + 20}px`,
+            x: `${(Math.random() - 0.5) * 200}px`,
+            rotate: Math.random() * 360,
+            opacity: [0.7, 0.5, 0.3, 0]
+          }}
+          transition={{
+            duration: 5 + Math.random() * 10,
+            ease: "linear",
+            repeat: Infinity,
+            delay: Math.random() * 20
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+// Japanese art frame
+const JapaneseFrame = ({ children }) => (
+  <div className="relative">
+    <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-terracotta"></div>
+    <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-terracotta"></div>
+    <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-terracotta"></div>
+    <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-terracotta"></div>
+    <div className="p-8">{children}</div>
+  </div>
+);
+
 const CucumberSushiPage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [activeStep, setActiveStep] = useState(1);
+  const [timer, setTimer] = useState(30 * 60); // 30 minutes in seconds
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const { toast } = useToast();
+
+  // Ref for scrolling to steps
+  const stepsRef = useRef(null);
 
   useEffect(() => {
     // Simulate loading images
@@ -61,6 +169,40 @@ const CucumberSushiPage = () => {
     }, 800);
   }, []);
 
+  // Timer effect
+  useEffect(() => {
+    let interval;
+    if (isTimerRunning && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prevTime) => prevTime - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      setIsTimerRunning(false);
+      toast({
+        title: "Timer Complete!",
+        description: "Your cooking timer has finished.",
+      });
+    }
+    return () => clearInterval(interval);
+  }, [isTimerRunning, timer, toast]);
+
+  const handleTimerToggle = () => {
+    setIsTimerRunning(!isTimerRunning);
+  };
+
+  const handleTimerReset = () => {
+    setTimer(30 * 60);
+    setIsTimerRunning(false);
+  };
+
+  const scrollToSteps = () => {
+    stepsRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Parallax effects
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
+  const titleY = useTransform(scrollYProgress, [0, 0.1], [0, -50]);
+  
   const recipe = {
     title: "Cucumber Wrapped Sushi (Kappa Maki)",
     description: "A refreshing and healthy twist on traditional sushi, using cucumber as the wrapper instead of nori. This light and delicious dish is perfect for summer gatherings or as an elegant appetizer.",
@@ -167,37 +309,6 @@ const CucumberSushiPage = () => {
     season: "Spring/Summer"
   };
 
-  // Cherry blossom animation
-  const CherryBlossoms = () => {
-    return (
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-3 h-3 bg-pink-200 rounded-full opacity-70"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `-20px`,
-              scale: 0.5 + Math.random() * 0.5
-            }}
-            animate={{
-              y: `${window.innerHeight + 20}px`,
-              x: `${(Math.random() - 0.5) * 200}px`,
-              rotate: Math.random() * 360,
-              opacity: [0.7, 0.5, 0.3, 0]
-            }}
-            transition={{
-              duration: 5 + Math.random() * 10,
-              ease: "linear",
-              repeat: Infinity,
-              delay: Math.random() * 20
-            }}
-          />
-        ))}
-      </div>
-    );
-  };
-
   if (!isLoaded) {
     return (
       <div className="min-h-screen bg-cream">
@@ -214,190 +325,328 @@ const CucumberSushiPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-cream relative">
+    <div className="min-h-screen bg-cream/95 relative">
       <CherryBlossoms />
       <Navbar />
       
-      {/* Recipe Header */}
-      <div className="relative h-[50vh] lg:h-[60vh] overflow-hidden">
-        <img 
-          src={recipe.image} 
-          alt={recipe.title}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
-          <div className="container mx-auto px-4 pb-12">
-            <div className="inline-block px-3 py-1 bg-sage/20 backdrop-blur-sm text-white rounded-full text-sm font-medium mb-4">
+      {/* Hero Header with Parallax */}
+      <div className="relative h-[60vh] lg:h-[75vh] overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={recipe.image} 
+            alt={recipe.title}
+            className="w-full h-full object-cover transform scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
+        </div>
+        
+        <motion.div 
+          className="absolute inset-0 flex items-center justify-center z-10"
+          style={{ opacity: titleOpacity, y: titleY }}
+        >
+          <div className="text-center px-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              className="inline-block px-6 py-2 bg-terracotta/90 backdrop-blur-sm text-white rounded-full text-lg font-medium mb-6"
+            >
               {recipe.season} Recipe
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 font-playfair">
+            </motion.div>
+            
+            <motion.h1 
+              className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 font-playfair leading-tight max-w-4xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
               {recipe.title}
-            </h1>
-            <p className="text-xl text-white/90 max-w-2xl font-montserrat">
+            </motion.h1>
+            
+            <motion.p 
+              className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto font-montserrat mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+            >
               {recipe.description}
-            </p>
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+            >
+              <Button 
+                size="lg" 
+                className="bg-sage hover:bg-sage/90 text-white font-medium rounded-full px-8"
+                onClick={scrollToSteps}
+              >
+                View Recipe Steps
+                <ChevronDown className="ml-2 h-5 w-5" />
+              </Button>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div 
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+        >
+          <ChevronDown className="h-8 w-8 text-white" />
+        </motion.div>
+      </div>
+      
+      {/* Japanese-style decorative element */}
+      <div className="relative z-10 -mt-16 pb-12">
+        <div className="container mx-auto">
+          <div className="bg-white shadow-lg rounded-xl p-6 md:p-10 relative z-10">
+            <div className="flex justify-center mb-8">
+              <div className="h-0.5 w-20 bg-terracotta"></div>
+              <div className="mx-4 text-terracotta">❀</div>
+              <div className="h-0.5 w-20 bg-terracotta"></div>
+            </div>
+
+            {/* Recipe Info Cards */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+              <motion.div 
+                className="bg-cream/60 backdrop-blur-sm p-4 rounded-lg text-center"
+                whileHover={{ y: -5, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
+                transition={{ duration: 0.3 }}
+              >
+                <Clock className="h-8 w-8 text-terracotta mx-auto mb-2" />
+                <p className="text-sm text-gray-500">Prep Time</p>
+                <p className="font-medium text-lg">{recipe.prepTime}</p>
+              </motion.div>
+              
+              <motion.div 
+                className="bg-cream/60 backdrop-blur-sm p-4 rounded-lg text-center"
+                whileHover={{ y: -5, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
+                transition={{ duration: 0.3 }}
+              >
+                <ChefHat className="h-8 w-8 text-terracotta mx-auto mb-2" />
+                <p className="text-sm text-gray-500">Cook Time</p>
+                <p className="font-medium text-lg">{recipe.cookTime}</p>
+              </motion.div>
+              
+              <motion.div 
+                className="bg-cream/60 backdrop-blur-sm p-4 rounded-lg text-center"
+                whileHover={{ y: -5, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
+                transition={{ duration: 0.3 }}
+              >
+                <Users className="h-8 w-8 text-terracotta mx-auto mb-2" />
+                <p className="text-sm text-gray-500">Servings</p>
+                <p className="font-medium text-lg">{recipe.servings}</p>
+              </motion.div>
+              
+              <motion.div 
+                className="bg-cream/60 backdrop-blur-sm p-4 rounded-lg text-center"
+                whileHover={{ y: -5, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
+                transition={{ duration: 0.3 }}
+              >
+                <Utensils className="h-8 w-8 text-terracotta mx-auto mb-2" />
+                <p className="text-sm text-gray-500">Difficulty</p>
+                <p className="font-medium text-lg">{recipe.difficulty}</p>
+              </motion.div>
+            </div>
+            
+            {/* Action Buttons */}
+            <div className="flex flex-wrap justify-center gap-3 mb-12">
+              <Button 
+                variant="outline" 
+                className="border-navy text-navy hover:bg-navy/5"
+                onClick={() => {
+                  toast({
+                    title: "Recipe Saved",
+                    description: "This recipe has been saved to your collection.",
+                  });
+                }}
+              >
+                <BookmarkPlus className="h-4 w-4 mr-2" />
+                Save Recipe
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                className="border-navy text-navy hover:bg-navy/5"
+                onClick={() => {
+                  toast({
+                    title: "Print Dialog",
+                    description: "Opening print dialog for this recipe.",
+                  });
+                }}
+              >
+                <Printer className="h-4 w-4 mr-2" />
+                Print Recipe
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                className="border-navy text-navy hover:bg-navy/5"
+                onClick={() => {
+                  toast({
+                    title: "Share Recipe",
+                    description: "Sharing options opened for this recipe.",
+                  });
+                }}
+              >
+                <Share2 className="h-4 w-4 mr-2" />
+                Share
+              </Button>
+            </div>
+
+            {/* Recipe Content */}
+            <Tabs defaultValue="ingredients" className="w-full">
+              <TabsList className="grid grid-cols-2 w-full max-w-md mx-auto mb-8">
+                <TabsTrigger value="ingredients" className="font-playfair text-lg">Ingredients</TabsTrigger>
+                <TabsTrigger value="instructions" className="font-playfair text-lg">Instructions</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="ingredients" className="space-y-4">
+                <JapaneseFrame>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+                    {recipe.ingredients.map((ingredient, index) => (
+                      <AnimatedIngredient 
+                        key={index} 
+                        name={ingredient.name} 
+                        amount={ingredient.amount}
+                        image={ingredient.image} 
+                      />
+                    ))}
+                  </div>
+                </JapaneseFrame>
+                
+                <div className="mt-12">
+                  <h3 className="text-xl font-bold text-navy mb-4 font-playfair border-b border-terracotta pb-2 inline-block">Equipment Needed:</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    {[
+                      "Rice cooker or pot",
+                      "Vegetable peeler or mandolin",
+                      "Sharp knife",
+                      "Cutting board",
+                      "Bamboo sushi mat",
+                      "Toothpicks"
+                    ].map((item, index) => (
+                      <motion.div 
+                        key={index}
+                        className="bg-white p-3 rounded-lg shadow-sm flex items-center"
+                        whileHover={{ scale: 1.03 }}
+                      >
+                        <span className="inline-block w-3 h-3 bg-terracotta rounded-full mr-3"></span>
+                        <span>{item}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="instructions" ref={stepsRef}>
+                {/* Timer Component */}
+                <Timer 
+                  seconds={timer} 
+                  isRunning={isTimerRunning} 
+                  onToggle={handleTimerToggle} 
+                  onReset={handleTimerReset}
+                />
+                
+                {/* Instructions */}
+                <motion.div 
+                  className="bg-white p-6 md:p-8 rounded-xl shadow-sm"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <h2 className="text-2xl font-bold text-navy mb-8 font-playfair border-b-2 border-terracotta pb-2 inline-block">Step-by-Step Instructions</h2>
+                  
+                  <div className="space-y-6">
+                    {recipe.instructions.map((instruction) => (
+                      <RecipeStep
+                        key={instruction.step}
+                        number={instruction.step}
+                        text={instruction.text}
+                        isActive={activeStep === instruction.step}
+                        onClick={() => setActiveStep(instruction.step)}
+                      />
+                    ))}
+                  </div>
+                </motion.div>
+                
+                {/* Chef's Notes */}
+                <motion.div 
+                  className="mt-12 p-6 bg-white rounded-xl shadow-sm"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                  <h3 className="text-xl font-bold text-navy mb-4 font-playfair">Chef's Notes</h3>
+                  <ul className="space-y-3">
+                    <li className="flex items-start">
+                      <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
+                      <span>For the best texture, make sure the cucumber strips are not too thick or too thin - about 1-2mm is ideal.</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
+                      <span>The rolls can be made a few hours in advance, but are best enjoyed the same day.</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
+                      <span>If you don't have mirin, you can substitute with 1 tablespoon of rice vinegar mixed with 1/2 teaspoon of sugar.</span>
+                    </li>
+                  </ul>
+                </motion.div>
+                
+                {/* Serving Suggestions */}
+                <motion.div 
+                  className="mt-8 p-6 bg-white rounded-xl shadow-sm"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                >
+                  <h3 className="text-xl font-bold text-navy mb-4 font-playfair">Serving Suggestions</h3>
+                  <p className="mb-4">Serve these refreshing cucumber rolls with:</p>
+                  <ul className="space-y-3">
+                    <li className="flex items-start">
+                      <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
+                      <span>Soy sauce for dipping</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
+                      <span>Pickled ginger</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
+                      <span>Wasabi paste</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
+                      <span>A cup of warm green tea</span>
+                    </li>
+                  </ul>
+                </motion.div>
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </div>
       
-      {/* Recipe Content */}
-      <div className="container mx-auto px-4 py-12">
-        {/* Japanese-style decorative element */}
-        <div className="flex justify-center mb-8">
-          <div className="h-0.5 w-20 bg-terracotta"></div>
-          <div className="mx-4 text-terracotta">❀</div>
-          <div className="h-0.5 w-20 bg-terracotta"></div>
-        </div>
-
-        <div className="flex flex-col md:flex-row mb-12">
-          {/* Recipe Info */}
-          <div className="bg-cream border border-gray-200 p-6 rounded-xl shadow-sm flex flex-wrap gap-8 justify-between w-full md:w-auto md:mr-8 mb-8 md:mb-0">
-            <div className="flex items-center">
-              <Clock className="h-5 w-5 text-terracotta mr-2" />
-              <div>
-                <p className="text-sm text-gray-500">Prep Time</p>
-                <p className="font-medium">{recipe.prepTime}</p>
-              </div>
-            </div>
-            <div className="flex items-center">
-              <ChefHat className="h-5 w-5 text-terracotta mr-2" />
-              <div>
-                <p className="text-sm text-gray-500">Cook Time</p>
-                <p className="font-medium">{recipe.cookTime}</p>
-              </div>
-            </div>
-            <div className="flex items-center">
-              <Users className="h-5 w-5 text-terracotta mr-2" />
-              <div>
-                <p className="text-sm text-gray-500">Servings</p>
-                <p className="font-medium">{recipe.servings}</p>
-              </div>
-            </div>
-            <div className="flex items-center">
-              <Utensils className="h-5 w-5 text-terracotta mr-2" />
-              <div>
-                <p className="text-sm text-gray-500">Difficulty</p>
-                <p className="font-medium">{recipe.difficulty}</p>
-              </div>
-            </div>
-          </div>
-          
-          {/* Action Buttons */}
-          <div className="flex space-x-3">
-            <Button variant="outline" className="border-navy text-navy hover:bg-navy/5" size="sm">
-              <Printer className="h-4 w-4 mr-2" />
-              Print
-            </Button>
-            <Button variant="outline" className="border-navy text-navy hover:bg-navy/5" size="sm">
-              <BookmarkPlus className="h-4 w-4 mr-2" />
-              Save
-            </Button>
-            <Button variant="outline" className="border-navy text-navy hover:bg-navy/5" size="sm">
-              <Share2 className="h-4 w-4 mr-2" />
-              Share
-            </Button>
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Ingredients */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-24 bg-cream/60 backdrop-blur-sm p-4 rounded-lg">
-              <h2 className="text-2xl font-bold text-navy mb-6 font-playfair border-b-2 border-terracotta pb-2 inline-block">Ingredients</h2>
-              
-              <div className="grid grid-cols-2 gap-4 mb-8">
-                {recipe.ingredients.map((ingredient, index) => (
-                  <AnimatedIngredient 
-                    key={index} 
-                    name={ingredient.name} 
-                    image={ingredient.image} 
-                  />
-                ))}
-              </div>
-              
-              <h3 className="text-lg font-bold text-navy mb-3 mt-8 font-playfair">Equipment Needed:</h3>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
-                  <span>Rice cooker or pot</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
-                  <span>Vegetable peeler or mandolin</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
-                  <span>Sharp knife</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
-                  <span>Cutting board</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
-                  <span>Toothpicks</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-          
-          {/* Instructions */}
-          <div className="lg:col-span-2">
-            <h2 className="text-2xl font-bold text-navy mb-6 font-playfair border-b-2 border-terracotta pb-2 inline-block">Instructions</h2>
-            <div className="space-y-6">
-              {recipe.instructions.map((instruction) => (
-                <RecipeStep
-                  key={instruction.step}
-                  number={instruction.step}
-                  text={instruction.text}
-                />
-              ))}
-            </div>
-            
-            {/* Chef's Notes */}
-            <div className="mt-12 p-6 bg-cream border border-gray-200 rounded-xl shadow-sm">
-              <h3 className="text-xl font-bold text-navy mb-4 font-playfair">Chef's Notes</h3>
-              <ul className="space-y-3">
-                <li className="flex items-start">
-                  <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
-                  <span>For the best texture, make sure the cucumber strips are not too thick or too thin - about 1-2mm is ideal.</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
-                  <span>The rolls can be made a few hours in advance, but are best enjoyed the same day.</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
-                  <span>If you don't have mirin, you can substitute with 1 tablespoon of rice vinegar mixed with 1/2 teaspoon of sugar.</span>
-                </li>
-              </ul>
-            </div>
-            
-            {/* Serving Suggestions */}
-            <div className="mt-8 p-6 bg-cream border border-gray-200 rounded-xl shadow-sm">
-              <h3 className="text-xl font-bold text-navy mb-4 font-playfair">Serving Suggestions</h3>
-              <p className="mb-4">Serve these refreshing cucumber rolls with:</p>
-              <ul className="space-y-3">
-                <li className="flex items-start">
-                  <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
-                  <span>Soy sauce for dipping</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
-                  <span>Pickled ginger</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
-                  <span>Wasabi paste</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="inline-block w-3 h-3 bg-terracotta rounded-full mt-1.5 mr-3"></span>
-                  <span>A cup of warm green tea</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+      {/* Call to Action - Back to top */}
+      <div className="container mx-auto py-12 px-4">
+        <motion.div 
+          className="text-center"
+          whileHover={{ scale: 1.05 }}
+        >
+          <Button 
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
+            className="bg-terracotta hover:bg-terracotta/90 text-white"
+          >
+            <ChevronUp className="mr-2 h-4 w-4" />
+            Back to Top
+          </Button>
+        </motion.div>
       </div>
       
       <Footer />
