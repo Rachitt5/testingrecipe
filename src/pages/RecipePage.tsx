@@ -4,28 +4,27 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import { 
   Clock, ChefHat, Users, Utensils, 
   ChevronDown, ChevronUp, ArrowRight, 
-  Play, Pause, Printer, Share2, Bookmark
+  Play, Pause, Printer, Share2, Bookmark,
+  Leaf, Cherry, Flower
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, useGLTF, PerspectiveCamera } from "@react-three/drei";
 
-// Header Component with colorful design
+// Header Component with Japanese-inspired design
 const Header = () => {
   return (
-    <header className="py-6 px-8 flex items-center justify-between bg-white/80 backdrop-blur-sm fixed top-0 left-0 w-full z-50">
+    <header className="py-6 px-8 flex items-center justify-between bg-white/80 backdrop-blur-sm fixed top-0 left-0 w-full z-50 border-b border-amber-100">
       <div className="flex items-center">
         <h1 className="text-2xl md:text-3xl font-bold font-playfair bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 bg-clip-text text-transparent">
-          Rachit Recipe
+          和食レシピ • Washoku Recipe
         </h1>
       </div>
       <nav className="hidden md:flex space-x-8">
-        <a href="#" className="text-indigo-700 hover:text-pink-500 transition-colors duration-300 font-medium">Home</a>
-        <a href="#" className="text-indigo-700 hover:text-pink-500 transition-colors duration-300 font-medium">Recipes</a>
-        <a href="#" className="text-indigo-700 hover:text-pink-500 transition-colors duration-300 font-medium">About</a>
-        <a href="#" className="text-indigo-700 hover:text-pink-500 transition-colors duration-300 font-medium">Contact</a>
+        <a href="#" className="text-indigo-700 hover:text-pink-500 transition-colors duration-300 font-medium">ホーム</a>
+        <a href="#" className="text-indigo-700 hover:text-pink-500 transition-colors duration-300 font-medium">レシピ</a>
+        <a href="#" className="text-indigo-700 hover:text-pink-500 transition-colors duration-300 font-medium">ブログ</a>
+        <a href="#" className="text-indigo-700 hover:text-pink-500 transition-colors duration-300 font-medium">お問い合わせ</a>
       </nav>
       <div className="flex items-center md:hidden">
         <Button variant="ghost" size="icon">
@@ -38,30 +37,30 @@ const Header = () => {
   );
 };
 
-// Animated mystical particles/stars effect
-const MysticalParticles = () => {
+// Cherry blossom animation component
+const CherryBlossoms = () => {
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-      {[...Array(30)].map((_, i) => (
+      {[...Array(15)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-2 h-2 bg-yellow-300 rounded-full opacity-70"
+          className="absolute w-3 h-3 bg-pink-200 rounded-full opacity-70"
           style={{
             left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            scale: 0.3 + Math.random() * 0.7
+            top: `-20px`,
+            scale: 0.5 + Math.random() * 0.5
           }}
           animate={{
-            y: [Math.random() * 10, -Math.random() * 10],
-            x: [Math.random() * 10, -Math.random() * 10],
-            opacity: [0.7, 0.3, 0.7],
-            scale: [0.5, 0.8, 0.5]
+            y: [0, window.innerHeight + 100],
+            x: [0, Math.random() * 100 - 50],
+            rotate: [0, 360],
+            opacity: [0.7, 0.5, 0]
           }}
           transition={{
-            duration: 3 + Math.random() * 5,
-            ease: "easeInOut",
+            duration: 5 + Math.random() * 10,
+            ease: "linear",
             repeat: Infinity,
-            delay: Math.random() * 5
+            delay: Math.random() * 20
           }}
         />
       ))}
@@ -69,11 +68,11 @@ const MysticalParticles = () => {
   );
 };
 
-// Recipe ingredient component with fun hover effect
+// Recipe ingredient component with wabi-sabi aesthetic
 const Ingredient = ({ name, amount, image, index }) => {
   return (
     <motion.div 
-      className="bg-white rounded-xl overflow-hidden shadow-lg mb-4 relative group ingredient-card border border-purple-100"
+      className="bg-amber-50 rounded-xl overflow-hidden shadow-lg mb-4 relative group ingredient-card border border-amber-100"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -85,7 +84,7 @@ const Ingredient = ({ name, amount, image, index }) => {
         transition: { duration: 0.4 }
       }}
     >
-      <div className="h-44 overflow-hidden bg-amber-50">
+      <div className="h-44 overflow-hidden">
         <motion.img 
           src={image} 
           alt={name} 
@@ -103,7 +102,7 @@ const Ingredient = ({ name, amount, image, index }) => {
   );
 };
 
-// Step component with animation and interactive elements
+// Step component with Japanese-inspired design
 const RecipeStep = ({ number, title, description, image, isActive, onClick }) => {
   return (
     <motion.div 
@@ -135,13 +134,13 @@ const RecipeStep = ({ number, title, description, image, isActive, onClick }) =>
           
           {isActive && (
             <motion.div 
-              className="mt-4 p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-indigo-100"
+              className="mt-4 p-3 bg-gradient-to-r from-amber-50 to-white rounded-lg border border-amber-100"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <p className="text-sm italic text-indigo-700">Chef's tip: Take your time with this step to ensure the best results!</p>
+              <p className="text-sm italic text-indigo-700">料理のポイント: Take your time with this step to ensure the best results!</p>
             </motion.div>
           )}
         </div>
@@ -150,7 +149,7 @@ const RecipeStep = ({ number, title, description, image, isActive, onClick }) =>
   );
 };
 
-// Custom timer component with colorful design
+// Custom timer component with Japanese-inspired aesthetics
 const RecipeTimer = ({ seconds, isRunning, onToggle, onReset }) => {
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
@@ -167,7 +166,7 @@ const RecipeTimer = ({ seconds, isRunning, onToggle, onReset }) => {
             <Clock className="h-7 w-7 text-white" />
           </div>
           <div>
-            <p className="text-xs text-indigo-600 uppercase tracking-wider font-semibold">Cooking Timer</p>
+            <p className="text-xs text-indigo-600 uppercase tracking-wider font-semibold">調理タイマー</p>
             <p className="text-3xl font-playfair font-bold bg-gradient-to-r from-indigo-700 to-purple-700 bg-clip-text text-transparent">
               {String(minutes).padStart(2, '0')}:{String(remainingSeconds).padStart(2, '0')}
             </p>
@@ -181,7 +180,7 @@ const RecipeTimer = ({ seconds, isRunning, onToggle, onReset }) => {
             onClick={onToggle}
           >
             {isRunning ? <Pause className="h-4 w-4 mr-1" /> : <Play className="h-4 w-4 mr-1" />}
-            {isRunning ? 'Pause' : 'Start'}
+            {isRunning ? 'ポーズ' : 'スタート'}
           </Button>
           <Button 
             variant="outline" 
@@ -189,7 +188,7 @@ const RecipeTimer = ({ seconds, isRunning, onToggle, onReset }) => {
             className="border-indigo-600 text-indigo-700 hover:bg-indigo-50"
             onClick={onReset}
           >
-            Reset
+            リセット
           </Button>
         </div>
       </div>
@@ -211,7 +210,7 @@ const RecipePage = () => {
   const titleOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
   const titleY = useTransform(scrollYProgress, [0, 0.1], [0, -50]);
   
-  // Recipe data with detailed instructions and images - updated with new images
+  // Recipe data with detailed instructions and images - updated with new image paths
   const recipe = {
     title: "Cucumber Wrapped Sushi",
     subtitle: "キュウリ巻き寿司",
@@ -226,70 +225,60 @@ const RecipePage = () => {
       {
         name: "English Cucumbers",
         amount: "2 medium",
-        image: "public/lovable-uploads/00c36de8-fb31-4e61-b0fc-2e3c3f02bf02.png"
+        image: "public/lovable-uploads/05d1dfb9-c962-419b-9e03-602196ee4648.png"
       },
       {
         name: "Cream Cheese",
         amount: "½ cup spreadable",
-        image: "public/lovable-uploads/6f73975e-1b84-42b2-bdb4-345fb2076674.png"
+        image: "public/lovable-uploads/17af3645-66cf-4133-8eb6-2c885ba1c338.png"
       },
       {
         name: "Japanese Rice",
         amount: "½ cup uncooked",
-        image: "public/lovable-uploads/f73573fd-faa6-4fd1-b264-ca1f42832037.png"
+        image: "public/lovable-uploads/2c691feb-d2c6-4a9d-ab6e-53ad1a27a810.png"
       },
       {
         name: "Rice Vinegar",
         amount: "2 tbsp",
-        image: "public/lovable-uploads/f8315545-8e86-4011-8bad-ff379ee026a2.png"
+        image: "public/lovable-uploads/a3d688bc-708b-4d35-bb1c-2fea31d8186b.png"
       },
       {
         name: "Sugar",
         amount: "1 tsp",
-        image: "public/lovable-uploads/4ee67882-0ed4-42d0-be03-20ec093ebd38.png"
+        image: "public/lovable-uploads/d1e82b30-3eb1-4298-b020-6b4a13512bba.png"
       },
       {
         name: "Salt",
         amount: "1 tsp",
-        image: "public/lovable-uploads/aeca7ad2-25c9-4fb5-9cb6-b717c8890730.png"
+        image: "public/lovable-uploads/9c1c112e-eddf-4bbf-9d50-c2539ef6df2b.png"
       },
       {
         name: "Smoked Salmon",
         amount: "8-10 pieces (150g)",
-        image: "public/lovable-uploads/2511b0b2-659a-497a-b373-3157d8548b59.png"
+        image: "public/lovable-uploads/5211885e-fcac-45aa-8247-8b60e613ef89.png"
       },
       {
         name: "Avocado",
         amount: "½, thinly sliced",
-        image: "public/lovable-uploads/0f00e809-aba4-45b7-908d-64a30981a5d7.png"
+        image: "public/lovable-uploads/3c74466f-d8a5-4966-b3a5-ccd702527151.png"
       },
       {
         name: "Sesame Seeds",
         amount: "For garnish",
-        image: "public/lovable-uploads/4bc9ab7a-61d6-46e9-83e9-801a6fda4284.png"
-      },
-      {
-        name: "Mirin",
-        amount: "1 tbsp",
-        image: "public/lovable-uploads/f8315545-8e86-4011-8bad-ff379ee026a2.png"
-      },
-      {
-        name: "Furikake",
-        amount: "For sprinkling (optional)",
-        image: "public/lovable-uploads/f19b950a-5a87-4648-be41-94416d57778e.png"
+        image: "public/lovable-uploads/413b37fb-4855-4e89-b541-eff3883bd185.png"
       }
     ],
     steps: [
       {
         number: 1,
         title: "Prepare the Rice",
-        description: "Wash and cook rice according to your usual method (stove top, rice cooker, pressure cooker). Fluff and let it cool slightly while whisking rice vinegar, sugar, salt and mirin in a small bowl until granules are fully dissolved. While rice is still warm, drizzle vinegar mixture over rice, stirring gently but thoroughly to coat rice grains.",
+        description: "Wash and cook rice according to your usual method (stove top, rice cooker, pressure cooker). Fluff and let it cool slightly while whisking rice vinegar, sugar, and salt in a small bowl until fully dissolved. While rice is still warm, drizzle mixture over rice, stirring gently but thoroughly to coat rice grains.",
         image: "public/lovable-uploads/081cc584-f098-4581-a40a-10c40cabf206.png"
       },
       {
         number: 2,
         title: "Slice the Cucumbers",
-        description: "Place cucumber vertical on cutting board in front of you. Using a vegetable y-peeler, press firmly and slice along the full length to get a thin, long strip of cucumber. Repeat until you reach the core where the channel of seeds are and you can no longer get full-width slices. You can still use the small strips on either side, or just cut the centre for snacking rather than using in the recipe.",
+        description: "Place cucumber vertical on cutting board in front of you. Using a vegetable y-peeler, press firmly and slice along the full length to get a thin, long strip of cucumber. Repeat until you reach the core where the channel of seeds are and you can no longer get full-width slices. You can still use the small strips on either side, or just cut the centre for snacking.",
         image: "public/lovable-uploads/a5043f61-ff9e-486e-8f0e-ddaf8eb37ea2.png"
       },
       {
@@ -301,7 +290,7 @@ const RecipePage = () => {
       {
         number: 4,
         title: "Add Fillings",
-        description: "Spread a thin layer of cream cheese all over. Arrange smoked salmon slices in a row about 1\" up from the bottom border. Spread seasoned rice above and slightly overlapping the row of smoked salmon, followed by avocado slices above and slightly overlapping the rice. Sprinkle furikake over the rice, if using.",
+        description: "Spread a thin layer of cream cheese all over. Arrange smoked salmon slices in a row about 1\" up from the bottom border. Spread seasoned rice above and slightly overlapping the row of smoked salmon, followed by avocado slices above and slightly overlapping the rice.",
         image: "public/lovable-uploads/5d9a49bf-88bf-41e9-9277-a1f2fd14500f.png"
       },
       {
@@ -330,8 +319,8 @@ const RecipePage = () => {
     } else if (timer === 0) {
       setIsTimerRunning(false);
       toast({
-        title: "Timer Complete!",
-        description: "Your cooking timer has finished.",
+        title: "タイマー完了!",
+        description: "調理タイマーが終了しました。",
       });
     }
     return () => clearInterval(interval);
@@ -360,22 +349,22 @@ const RecipePage = () => {
   // Show loading animation
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-amber-50 flex items-center justify-center">
+      <div className="min-h-screen japanese-paper flex items-center justify-center">
         <div className="text-center">
           <div className="animate-rotate-slow w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-lg text-indigo-700 font-playfair">Preparing recipe magic...</p>
+          <p className="text-lg text-indigo-700 font-playfair">準備中...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-amber-50 relative">
+    <div className="min-h-screen japanese-paper relative">
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center opacity-15" 
         style={{ backgroundImage: `url(${recipe.heroImage})` }} 
       />
-      <MysticalParticles />
+      <CherryBlossoms />
       <Header />
       
       {/* Hero Section with Parallax */}
@@ -440,7 +429,7 @@ const RecipePage = () => {
                 className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white font-bold rounded-full px-8 py-6 shadow-lg"
                 onClick={scrollToSteps}
               >
-                Explore Recipe
+                レシピを見る
                 <ChevronDown className="ml-2 h-5 w-5" />
               </Button>
             </motion.div>
@@ -464,7 +453,7 @@ const RecipePage = () => {
         {/* Recipe Info Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
           <motion.div 
-            className="bg-white p-4 rounded-lg shadow-md text-center"
+            className="bg-amber-50 p-4 rounded-lg shadow-md text-center border border-amber-100"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -472,12 +461,12 @@ const RecipePage = () => {
             whileHover={{ y: -5, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
           >
             <Clock className="h-8 w-8 text-amber-500 mx-auto mb-2" />
-            <p className="text-sm text-gray-500">Prep Time</p>
+            <p className="text-sm text-gray-500">準備時間</p>
             <p className="font-medium text-lg text-indigo-700">{recipe.prepTime}</p>
           </motion.div>
           
           <motion.div 
-            className="bg-white p-4 rounded-lg shadow-md text-center"
+            className="bg-amber-50 p-4 rounded-lg shadow-md text-center border border-amber-100"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -485,12 +474,12 @@ const RecipePage = () => {
             whileHover={{ y: -5, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
           >
             <ChefHat className="h-8 w-8 text-amber-500 mx-auto mb-2" />
-            <p className="text-sm text-gray-500">Cook Time</p>
+            <p className="text-sm text-gray-500">調理時間</p>
             <p className="font-medium text-lg text-indigo-700">{recipe.cookTime}</p>
           </motion.div>
           
           <motion.div 
-            className="bg-white p-4 rounded-lg shadow-md text-center"
+            className="bg-amber-50 p-4 rounded-lg shadow-md text-center border border-amber-100"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -498,12 +487,12 @@ const RecipePage = () => {
             whileHover={{ y: -5, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
           >
             <Users className="h-8 w-8 text-amber-500 mx-auto mb-2" />
-            <p className="text-sm text-gray-500">Servings</p>
+            <p className="text-sm text-gray-500">何人前</p>
             <p className="font-medium text-lg text-indigo-700">{recipe.servings}</p>
           </motion.div>
           
           <motion.div 
-            className="bg-white p-4 rounded-lg shadow-md text-center"
+            className="bg-amber-50 p-4 rounded-lg shadow-md text-center border border-amber-100"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -511,7 +500,7 @@ const RecipePage = () => {
             whileHover={{ y: -5, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
           >
             <Utensils className="h-8 w-8 text-amber-500 mx-auto mb-2" />
-            <p className="text-sm text-gray-500">Difficulty</p>
+            <p className="text-sm text-gray-500">難易度</p>
             <p className="font-medium text-lg text-indigo-700">{recipe.difficulty}</p>
           </motion.div>
         </div>
@@ -521,13 +510,13 @@ const RecipePage = () => {
           <TabsList className="grid grid-cols-2 w-full max-w-md mx-auto mb-8">
             <TabsTrigger 
               value="ingredients" 
-              className="text-lg font-playfair bg-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-400 data-[state=active]:to-orange-500 data-[state=active]:text-white"
+              className="text-lg font-playfair bg-amber-50 data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-400 data-[state=active]:to-orange-500 data-[state=active]:text-white"
             >
               材料<br/><span className="text-sm">Ingredients</span>
             </TabsTrigger>
             <TabsTrigger 
               value="instructions" 
-              className="text-lg font-playfair bg-white data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-400 data-[state=active]:to-orange-500 data-[state=active]:text-white"
+              className="text-lg font-playfair bg-amber-50 data-[state=active]:bg-gradient-to-r data-[state=active]:from-amber-400 data-[state=active]:to-orange-500 data-[state=active]:text-white"
             >
               手順<br/><span className="text-sm">Instructions</span>
             </TabsTrigger>
@@ -535,9 +524,9 @@ const RecipePage = () => {
           
           <TabsContent value="ingredients" className="space-y-6">
             <div className="relative p-1">
-              <div className="p-8 bg-white rounded-xl shadow-lg">
+              <div className="p-8 bg-amber-50 rounded-xl shadow-lg border border-amber-100">
                 <h2 className="text-3xl font-bold text-center mb-8 font-playfair">
-                  <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Recipe Ingredients</span>
+                  <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">レシピの材料</span>
                 </h2>
                 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-6">
@@ -556,21 +545,21 @@ const RecipePage = () => {
             
             <div className="mt-12">
               <h3 className="text-2xl font-bold text-center mb-6 font-playfair">
-                <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">Kitchen Tools</span>
+                <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">キッチンツール</span>
               </h3>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {[
-                  "Rice cooker or pot",
-                  "Vegetable peeler or mandolin",
-                  "Sharp knife",
-                  "Cutting board",
-                  "Bamboo sushi mat",
-                  "Toothpicks"
+                  "炊飯器または鍋",
+                  "野菜ピーラーまたはマンドリン",
+                  "包丁",
+                  "まな板",
+                  "巻きす",
+                  "爪楊枝"
                 ].map((item, index) => (
                   <motion.div 
                     key={index}
-                    className="bg-white p-4 rounded-lg shadow-md flex items-center"
+                    className="bg-amber-50 p-4 rounded-lg shadow-md flex items-center border border-amber-100"
                     initial={{ opacity: 0, x: -10 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
@@ -596,14 +585,14 @@ const RecipePage = () => {
             
             {/* Instruction Steps */}
             <motion.div 
-              className="bg-white p-6 md:p-8 rounded-xl shadow-lg"
+              className="bg-amber-50 p-6 md:p-8 rounded-xl shadow-lg border border-amber-100"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
               <h2 className="text-3xl font-bold text-center mb-8 font-playfair">
-                <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Step-by-Step Instructions</span>
+                <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">調理手順</span>
               </h2>
               
               <div className="space-y-6">
@@ -623,30 +612,30 @@ const RecipePage = () => {
             
             {/* Final Result */}
             <motion.div 
-              className="mt-12 p-6 bg-white rounded-xl shadow-lg"
+              className="mt-12 p-6 bg-amber-50 rounded-xl shadow-lg border border-amber-100"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <h3 className="text-2xl font-bold text-center mb-6 font-playfair">
-                <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">Final Result</span>
+                <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">完成品</span>
               </h3>
               
               <div className="overflow-hidden rounded-lg shadow-md">
-                <img src="public/lovable-uploads/f19b950a-5a87-4648-be41-94416d57778e.png" alt="Final Sushi" className="w-full" />
+                <img src={recipe.finalImage} alt="Final Sushi" className="w-full" />
               </div>
               
-              <div className="mt-8 bg-gradient-to-r from-indigo-50 to-purple-50 p-5 rounded-lg">
+              <div className="mt-8 bg-gradient-to-r from-indigo-50 to-amber-50 p-5 rounded-lg border border-amber-100">
                 <p className="italic text-indigo-700 text-center">
-                  "The cucumber wrapper adds a refreshing crunch while the cream cheese, smoked salmon, and avocado create a perfect harmony of flavors. Enjoy this healthy alternative to traditional sushi!"
+                  "キュウリの包みはさわやかな食感を加え、クリームチーズ、スモークサーモン、アボカドは完璧な風味のハーモニーを作り出します。伝統的な寿司の健康的な代替品をお楽しみください！"
                 </p>
               </div>
             </motion.div>
             
             {/* Final image */}
             <motion.div 
-              className="mt-12 p-6 bg-white rounded-xl shadow-lg overflow-hidden"
+              className="mt-12 p-6 bg-amber-50 rounded-xl shadow-lg overflow-hidden border border-amber-100"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -664,22 +653,22 @@ const RecipePage = () => {
             className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white shadow-md"
           >
             <ChevronUp className="mr-2 h-4 w-4" />
-            Back to Top
+            トップに戻る
           </Button>
         </div>
       </div>
       
-      {/* Footer with colorful theme */}
-      <footer className="bg-gradient-to-r from-indigo-900 to-purple-900 text-white py-12 px-4">
+      {/* Footer with Japanese-inspired theme */}
+      <footer className="bg-gradient-to-r from-indigo-900 to-purple-900 text-white py-12 px-4 relative">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-8 md:mb-0">
               <h3 className="text-2xl font-playfair font-bold mb-2 bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">料理ブログ</h3>
-              <p className="text-white/70">Rachit's Culinary Journey</p>
+              <p className="text-white/70">和食の旅</p>
             </div>
             
             <div className="flex space-x-6">
-              {['Home', 'Recipes', 'About', 'Contact'].map((item, i) => (
+              {['ホーム', 'レシピ', 'ブログ', 'お問い合わせ'].map((item, i) => (
                 <a 
                   key={i} 
                   href="#" 
@@ -692,7 +681,7 @@ const RecipePage = () => {
           </div>
           
           <div className="mt-8 pt-8 border-t border-white/20 text-center text-white/60 text-sm">
-            <p>© 2025 Rachit Recipe Blog. All rights reserved.</p>
+            <p>© 2025 和食レシピブログ. All rights reserved.</p>
           </div>
         </div>
       </footer>
