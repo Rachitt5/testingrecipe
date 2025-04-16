@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { 
@@ -620,4 +621,67 @@ const RecipePage = () => {
                 <img src={recipe.finalImage} alt="Final Sushi" className="w-full" />
               </div>
               
-              <div className="mt-8 bg-gradient-to-r from-indigo-50 to-purple-50 p-5
+              <div className="mt-8 bg-gradient-to-r from-indigo-50 to-purple-50 p-5 rounded-lg">
+                <p className="italic text-indigo-700 text-center">
+                  "The cucumber wrapper adds a refreshing crunch while the cream cheese, smoked salmon, and avocado create a perfect harmony of flavors. Enjoy this healthy alternative to traditional sushi!"
+                </p>
+              </div>
+            </motion.div>
+            
+            {/* Final image */}
+            <motion.div 
+              className="mt-12 p-6 bg-white rounded-xl shadow-lg overflow-hidden"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <img src="public/lovable-uploads/b31e9e9f-ec09-4ed3-8f7c-ff06fe22fe1c.png" alt="Completed Dish" className="w-full rounded-lg" />
+            </motion.div>
+          </TabsContent>
+        </Tabs>
+        
+        {/* Call to Action - Back to top */}
+        <div className="mt-16 text-center">
+          <Button 
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
+            className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white shadow-md"
+          >
+            <ChevronUp className="mr-2 h-4 w-4" />
+            Back to Top
+          </Button>
+        </div>
+      </div>
+      
+      {/* Footer with colorful theme */}
+      <footer className="bg-gradient-to-r from-indigo-900 to-purple-900 text-white py-12 px-4">
+        <div className="container mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="mb-8 md:mb-0">
+              <h3 className="text-2xl font-playfair font-bold mb-2 bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">料理ブログ</h3>
+              <p className="text-white/70">Rachit's Culinary Journey</p>
+            </div>
+            
+            <div className="flex space-x-6">
+              {['Home', 'Recipes', 'About', 'Contact'].map((item, i) => (
+                <a 
+                  key={i} 
+                  href="#" 
+                  className="text-white/80 hover:text-amber-300 transition-colors duration-300"
+                >
+                  {item}
+                </a>
+              ))}
+            </div>
+          </div>
+          
+          <div className="mt-8 pt-8 border-t border-white/20 text-center text-white/60 text-sm">
+            <p>© 2025 Rachit Recipe Blog. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default RecipePage;
