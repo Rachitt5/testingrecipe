@@ -211,7 +211,7 @@ const RecipePage = () => {
   const titleOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
   const titleY = useTransform(scrollYProgress, [0, 0.1], [0, -50]);
   
-  // Recipe data with detailed instructions and images - reordered with correct images
+  // Recipe data with detailed instructions and images - updated with new images
   const recipe = {
     title: "Cucumber Wrapped Sushi",
     subtitle: "キュウリ巻き寿司",
@@ -267,41 +267,57 @@ const RecipePage = () => {
         name: "Sesame Seeds",
         amount: "For garnish",
         image: "public/lovable-uploads/4bc9ab7a-61d6-46e9-83e9-801a6fda4284.png"
+      },
+      {
+        name: "Mirin",
+        amount: "1 tbsp",
+        image: "public/lovable-uploads/f8315545-8e86-4011-8bad-ff379ee026a2.png"
+      },
+      {
+        name: "Furikake",
+        amount: "For sprinkling (optional)",
+        image: "public/lovable-uploads/f19b950a-5a87-4648-be41-94416d57778e.png"
       }
     ],
     steps: [
       {
         number: 1,
         title: "Prepare the Rice",
-        description: "Wash and cook rice according to your usual method (stove top, rice cooker, pressure cooker). Fluff and let it cool slightly while whisking rice vinegar, sugar, and salt in a small bowl until fully dissolved. While rice is still warm, drizzle mixture over rice, stirring gently but thoroughly to coat rice grains.",
-        image: "public/lovable-uploads/757c253b-6678-44a9-8b96-b6fea2d82f2a.png"
+        description: "Wash and cook rice according to your usual method (stove top, rice cooker, pressure cooker). Fluff and let it cool slightly while whisking rice vinegar, sugar, salt and mirin in a small bowl until granules are fully dissolved. While rice is still warm, drizzle vinegar mixture over rice, stirring gently but thoroughly to coat rice grains.",
+        image: "public/lovable-uploads/081cc584-f098-4581-a40a-10c40cabf206.png"
       },
       {
         number: 2,
         title: "Slice the Cucumbers",
-        description: "Place cucumber vertical on cutting board in front of you. Using a vegetable y-peeler, press firmly and slice along the full length to get a thin, long strip of cucumber. Repeat until you reach the core where the channel of seeds are and you can no longer get full-width slices.",
-        image: "public/lovable-uploads/b8101df5-8d3d-4adc-b91c-c7635b956fad.png"
+        description: "Place cucumber vertical on cutting board in front of you. Using a vegetable y-peeler, press firmly and slice along the full length to get a thin, long strip of cucumber. Repeat until you reach the core where the channel of seeds are and you can no longer get full-width slices. You can still use the small strips on either side, or just cut the centre for snacking rather than using in the recipe.",
+        image: "public/lovable-uploads/a5043f61-ff9e-486e-8f0e-ddaf8eb37ea2.png"
       },
       {
         number: 3,
         title: "Arrange Cucumber Strips",
         description: "Arrange sliced cucumbers on a bamboo sushi mat or large piece of plastic food wrap, vertically next to each other and overlapping to create one large square \"sheet\" of cucumber slices. Pat very dry with a paper towel.",
-        image: "public/lovable-uploads/c375daac-adb1-4aa4-9b00-1e6f282c8d28.png"
+        image: "public/lovable-uploads/094551bb-a534-4604-b435-7c2bfb5bdbe9.png"
       },
       {
         number: 4,
         title: "Add Fillings",
-        description: "Spread a thin layer of cream cheese all over. Arrange smoked salmon slices in a row about 1\" up from the bottom border. Spread seasoned rice above and slightly overlapping the row of smoked salmon, followed by avocado slices above and slightly overlapping the rice.",
-        image: "public/lovable-uploads/d60d34cb-7f2d-47f1-8b0c-09b34950bb4f.png"
+        description: "Spread a thin layer of cream cheese all over. Arrange smoked salmon slices in a row about 1\" up from the bottom border. Spread seasoned rice above and slightly overlapping the row of smoked salmon, followed by avocado slices above and slightly overlapping the rice. Sprinkle furikake over the rice, if using.",
+        image: "public/lovable-uploads/5d9a49bf-88bf-41e9-9277-a1f2fd14500f.png"
       },
       {
         number: 5,
-        title: "Roll and Slice",
-        description: "Using the bamboo mat (or plastic wrap) to aid, roll up snugly, pulling the bamboo mat or wrap back and away as you roll so it does not get rolled up into the cucumber roll. Cut cucumber sushi roll crosswise into 8 pieces. Arrange on serving plate and garnish with black/white sesame seeds.",
-        image: "public/lovable-uploads/9ccf91c6-5df8-4cd2-9c67-812619d4e045.png"
+        title: "Roll and Shape",
+        description: "Using the bamboo mat (or plastic wrap) to aid, roll up snugly, pulling the bamboo mat or wrap back and away as you roll so it does not get rolled up into the cucumber roll. Watch for a visual demo of this step to perfect your technique!",
+        image: "public/lovable-uploads/7a7705a4-89f3-4ad9-ba4a-de505901e1ab.png"
+      },
+      {
+        number: 6,
+        title: "Slice into Pieces",
+        description: "Cut cucumber sushi roll crosswise into 8 pieces using a sharp knife. Arrange on serving plate and garnish with black/white sesame seeds.",
+        image: "public/lovable-uploads/8211f525-25ce-40f6-b119-93c63250ddd5.png"
       }
     ],
-    finalImage: "public/lovable-uploads/a0fa9695-3ec8-4b18-bc49-ca77079b8dff.png"
+    finalImage: "public/lovable-uploads/f19b950a-5a87-4648-be41-94416d57778e.png"
   };
 
   // Timer hooks
@@ -618,7 +634,7 @@ const RecipePage = () => {
               </h3>
               
               <div className="overflow-hidden rounded-lg shadow-md">
-                <img src={recipe.finalImage} alt="Final Sushi" className="w-full" />
+                <img src="public/lovable-uploads/f19b950a-5a87-4648-be41-94416d57778e.png" alt="Final Sushi" className="w-full" />
               </div>
               
               <div className="mt-8 bg-gradient-to-r from-indigo-50 to-purple-50 p-5 rounded-lg">
