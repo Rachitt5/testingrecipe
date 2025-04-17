@@ -297,19 +297,19 @@ const RecipePage = () => {
         number: 3,
         title: "Arrange Cucumber Strips",
         description: "Arrange sliced cucumbers on a bamboo sushi mat or large piece of plastic food wrap, vertically next to each other and overlapping to create one large square \"sheet\" of cucumber slices. Pat very dry with a paper towel.",
-        image: "/lovable-uploads/094551bb-a534-4604-b435-7c2bfb5bdbe9.png"
+        image: "/lovable-uploads/step3.png"
       },
       {
         number: 4,
         title: "Add Fillings",
         description: "Spread a thin layer of cream cheese all over. Arrange smoked salmon slices in a row about 1\" up from the bottom border. Spread seasoned rice above and slightly overlapping the row of smoked salmon, followed by avocado slices above and slightly overlapping the rice.",
-        image: "/lovable-uploads/5d9a49bf-88bf-41e9-9277-a1f2fd14500f.png"
+        image: "/lovable-uploads/step4.png"
       },
       {
         number: 5,
         title: "Roll and Shape",
         description: "Using the bamboo mat (or plastic wrap) to aid, roll up snugly, pulling the bamboo mat or wrap back and away as you roll so it does not get rolled up into the cucumber roll. Watch for a visual demo of this step to perfect your technique!",
-        image: "/lovable-uploads/7a7705a4-89f3-4ad9-ba4a-de505901e1ab.png"
+        image: "/lovable-uploads/step5.png"
       },
       {
         number: 6,
