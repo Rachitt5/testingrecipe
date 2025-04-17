@@ -93,7 +93,7 @@ const Ingredient = ({ name, amount, image, index }) => {
             alt={name}
             className="w-full h-full object-cover"
             onError={(e) => {
-              e.currentTarget.src = "public/placeholder.svg";
+              e.currentTarget.src = "/placeholder.svg";
             }}
           />
         </motion.div>
@@ -138,7 +138,7 @@ const RecipeStep = ({ number, title, description, image, isActive, onClick }) =>
                 alt={`Step ${number}`}
                 className="w-full"
                 onError={(e) => {
-                  e.currentTarget.src = "public/placeholder.svg";
+                  e.currentTarget.src = "/placeholder.svg";
                 }}
               />
             </motion.div>
@@ -227,7 +227,7 @@ const RecipePage = () => {
     title: "Japanese Sushi",
     subtitle: "Cucumber Wrapped Elegance",
     description: "A refreshing twist on traditional maki sushi, using thin cucumber slices as the wrapper instead of nori. This elegant appetizer is perfect for summer gatherings or as a light meal.",
-    heroImage: "public/lovable-uploads/e3a85ed1-3911-44c7-b5a0-77f780931944.png", 
+    heroImage: "/lovable-uploads/e3a85ed1-3911-44c7-b5a0-77f780931944.png", 
     prepTime: "25 mins",
     cookTime: "15 mins",
     restTime: "30 mins",
@@ -237,47 +237,47 @@ const RecipePage = () => {
       {
         name: "English Cucumbers",
         amount: "2 medium",
-        image: "public/lovable-uploads/05d1dfb9-c962-419b-9e03-602196ee4648.png"
+        image: "/lovable-uploads/05d1dfb9-c962-419b-9e03-602196ee4648.png"
       },
       {
         name: "Cream Cheese",
         amount: "½ cup spreadable",
-        image: "public/lovable-uploads/17af3645-66cf-4133-8eb6-2c885ba1c338.png"
+        image: "/lovable-uploads/17af3645-66cf-4133-8eb6-2c885ba1c338.png"
       },
       {
         name: "Japanese Rice",
         amount: "½ cup uncooked",
-        image: "public/lovable-uploads/2c691feb-d2c6-4a9d-ab6e-53ad1a27a810.png"
+        image: "/lovable-uploads/2c691feb-d2c6-4a9d-ab6e-53ad1a27a810.png"
       },
       {
         name: "Rice Vinegar",
         amount: "2 tbsp",
-        image: "public/lovable-uploads/a3d688bc-708b-4d35-bb1c-2fea31d8186b.png"
+        image: "/lovable-uploads/a3d688bc-708b-4d35-bb1c-2fea31d8186b.png"
       },
       {
         name: "Sugar",
         amount: "1 tsp",
-        image: "public/lovable-uploads/d1e82b30-3eb1-4298-b020-6b4a13512bba.png"
+        image: "/lovable-uploads/d1e82b30-3eb1-4298-b020-6b4a13512bba.png"
       },
       {
         name: "Salt",
         amount: "1 tsp",
-        image: "public/lovable-uploads/9c1c112e-eddf-4bbf-9d50-c2539ef6df2b.png"
+        image: "/lovable-uploads/9c1c112e-eddf-4bbf-9d50-c2539ef6df2b.png"
       },
       {
         name: "Smoked Salmon",
         amount: "8-10 pieces (150g)",
-        image: "public/lovable-uploads/5211885e-fcac-45aa-8247-8b60e613ef89.png"
+        image: "/lovable-uploads/5211885e-fcac-45aa-8247-8b60e613ef89.png"
       },
       {
         name: "Avocado",
         amount: "½, thinly sliced",
-        image: "public/lovable-uploads/3c74466f-d8a5-4966-b3a5-ccd702527151.png"
+        image: "/lovable-uploads/3c74466f-d8a5-4966-b3a5-ccd702527151.png"
       },
       {
         name: "Sesame Seeds",
         amount: "For garnish",
-        image: "public/lovable-uploads/413b37fb-4855-4e89-b541-eff3883bd185.png"
+        image: "/lovable-uploads/413b37fb-4855-4e89-b541-eff3883bd185.png"
       }
     ],
     steps: [
@@ -285,40 +285,40 @@ const RecipePage = () => {
         number: 1,
         title: "Prepare the Rice",
         description: "Wash and cook rice according to your usual method (stove top, rice cooker, pressure cooker). Fluff and let it cool slightly while whisking rice vinegar, sugar, and salt in a small bowl until fully dissolved. While rice is still warm, drizzle mixture over rice, stirring gently but thoroughly to coat rice grains.",
-        image: "public/lovable-uploads/081cc584-f098-4581-a40a-10c40cabf206.png"
+        image: "/lovable-uploads/081cc584-f098-4581-a40a-10c40cabf206.png"
       },
       {
         number: 2,
         title: "Slice the Cucumbers",
         description: "Place cucumber vertical on cutting board in front of you. Using a vegetable y-peeler, press firmly and slice along the full length to get a thin, long strip of cucumber. Repeat until you reach the core where the channel of seeds are and you can no longer get full-width slices. You can still use the small strips on either side, or just cut the centre for snacking.",
-        image: "public/lovable-uploads/a5043f61-ff9e-486e-8f0e-ddaf8eb37ea2.png"
+        image: "/lovable-uploads/a5043f61-ff9e-486e-8f0e-ddaf8eb37ea2.png"
       },
       {
         number: 3,
         title: "Arrange Cucumber Strips",
         description: "Arrange sliced cucumbers on a bamboo sushi mat or large piece of plastic food wrap, vertically next to each other and overlapping to create one large square \"sheet\" of cucumber slices. Pat very dry with a paper towel.",
-        image: "public/lovable-uploads/094551bb-a534-4604-b435-7c2bfb5bdbe9.png"
+        image: "/lovable-uploads/094551bb-a534-4604-b435-7c2bfb5bdbe9.png"
       },
       {
         number: 4,
         title: "Add Fillings",
         description: "Spread a thin layer of cream cheese all over. Arrange smoked salmon slices in a row about 1\" up from the bottom border. Spread seasoned rice above and slightly overlapping the row of smoked salmon, followed by avocado slices above and slightly overlapping the rice.",
-        image: "public/lovable-uploads/5d9a49bf-88bf-41e9-9277-a1f2fd14500f.png"
+        image: "/lovable-uploads/5d9a49bf-88bf-41e9-9277-a1f2fd14500f.png"
       },
       {
         number: 5,
         title: "Roll and Shape",
         description: "Using the bamboo mat (or plastic wrap) to aid, roll up snugly, pulling the bamboo mat or wrap back and away as you roll so it does not get rolled up into the cucumber roll. Watch for a visual demo of this step to perfect your technique!",
-        image: "public/lovable-uploads/7a7705a4-89f3-4ad9-ba4a-de505901e1ab.png"
+        image: "/lovable-uploads/7a7705a4-89f3-4ad9-ba4a-de505901e1ab.png"
       },
       {
         number: 6,
         title: "Slice into Pieces",
         description: "Cut cucumber sushi roll crosswise into 8 pieces using a sharp knife. Arrange on serving plate and garnish with black/white sesame seeds.",
-        image: "public/lovable-uploads/8211f525-25ce-40f6-b119-93c63250ddd5.png"
+        image: "/lovable-uploads/8211f525-25ce-40f6-b119-93c63250ddd5.png"
       }
     ],
-    finalImage: "public/lovable-uploads/f19b950a-5a87-4648-be41-94416d57778e.png"
+    finalImage: "/lovable-uploads/f19b950a-5a87-4648-be41-94416d57778e.png"
   };
 
   // Timer hooks
@@ -388,7 +388,7 @@ const RecipePage = () => {
         </div>
         
         <div className="absolute inset-0 flex items-center">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto">
             <div className="max-w-2xl mx-auto text-center z-10 relative">
               <motion.p 
                 className="text-lg font-medium mb-4 text-white/90"
@@ -634,7 +634,7 @@ const RecipePage = () => {
                   alt="Final Sushi" 
                   className="w-full"
                   onError={(e) => {
-                    e.currentTarget.src = "public/placeholder.svg";
+                    e.currentTarget.src = "/placeholder.svg";
                   }}
                 />
               </div>
