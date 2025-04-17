@@ -1,7 +1,7 @@
-
-import { useEffect, useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Sun, Snowflake, Leaf, Flame } from 'lucide-react';
 
 interface Ingredient {
   name: string;
@@ -13,10 +13,44 @@ interface Ingredient {
   rotation: number;
 }
 
+// Seasonal theme data for UI enhancement only
+const seasonalThemes = [
+  { name: 'Spring', icon: <Leaf className="inline w-5 h-5 text-green-500" />, bg: 'bg-gradient-to-br from-green-100 via-pink-100 to-yellow-100', accent: 'text-green-600' },
+  { name: 'Summer', icon: <Sun className="inline w-5 h-5 text-yellow-400" />, bg: 'bg-gradient-to-br from-yellow-100 via-orange-100 to-pink-100', accent: 'text-yellow-600' },
+  { name: 'Autumn', icon: <Flame className="inline w-5 h-5 text-orange-500" />, bg: 'bg-gradient-to-br from-orange-100 via-red-100 to-yellow-200', accent: 'text-orange-600' },
+  { name: 'Winter', icon: <Snowflake className="inline w-5 h-5 text-blue-400" />, bg: 'bg-gradient-to-br from-blue-100 via-cyan-100 to-white', accent: 'text-blue-600' },
+];
+
+// Lotus petal animation component
+const LotusPetals = () => {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {[...Array(8)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute lotus-petal"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            width: `${30 + Math.random() * 20}px`,
+            height: `${30 + Math.random() * 20}px`,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle at 30% 30%, rgba(255, 192, 203, 0.8), rgba(255, 140, 140, 0.4))',
+            boxShadow: '0 0 10px rgba(255, 192, 203, 0.5)',
+            animationDelay: `${i * 0.5}s`
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 const Hero = () => {
+  throw new Error("TEST: This is the Hero component in src/components/Hero.tsx");
   const parallaxRef = useRef<HTMLDivElement>(null);
+  const [theme, setTheme] = useState(0); // For theme toggle UI enhancement
   
-  // Floating ingredients for the hero section
+  // Floating ingredients for the hero section - UNCHANGED
   const ingredients: Ingredient[] = [
     { 
       name: 'Tomato', 
@@ -48,104 +82,53 @@ const Hero = () => {
   ];
 
   useEffect(() => {
-    if (!parallaxRef.current) return;
-    
-    const handleMouseMove = (event: MouseEvent) => {
-      const container = parallaxRef.current;
-      if (!container) return;
-      
-      const { clientX, clientY } = event;
-      const { left, top, width, height } = container.getBoundingClientRect();
-      
-      const x = (clientX - left) / width - 0.5;
-      const y = (clientY - top) / height - 0.5;
-      
-      const elements = container.querySelectorAll('.ingredient-item');
-      
-      elements.forEach((el) => {
-        const element = el as HTMLElement;
-        const speedX = parseFloat(element.dataset.speedx || '0');
-        const speedY = parseFloat(element.dataset.speedy || '0');
-        const speedZ = parseFloat(element.dataset.speedz || '0');
-        const rotation = parseFloat(element.dataset.rotation || '0');
-        
-        const moveX = x * speedX;
-        const moveY = y * speedY;
-        const moveZ = 20 + speedZ;
-        const rotateY = x * rotation;
-        
-        element.style.transform = `translate3d(${moveX}px, ${moveY}px, ${moveZ}px) rotateY(${rotateY}deg)`;
-      });
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
+    const flecks = Array.from({ length: 10 });
+    // No-op, just for rendering
   }, []);
 
   return (
-    <section className="min-h-screen relative flex items-center bg-cream">
-      <div 
-        ref={parallaxRef}
-        className="container mx-auto px-4 pt-24 pb-16 parallax-container relative z-10"
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="text-center lg:text-left z-20">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-navy leading-tight">
-              Seasonal <span className="text-terracotta">Ingredients</span>, Extraordinary <span className="text-sage">Recipes</span>
-            </h1>
-            <p className="text-lg md:text-xl mb-8 text-gray-700 max-w-md mx-auto lg:mx-0">
-              Discover the art of cooking with nature's finest seasonal offerings, brought to life through immersive culinary experiences.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
-              <Button className="bg-terracotta hover:bg-terracotta/90 text-white px-8 py-6 text-lg">
-                Explore Recipes
-              </Button>
-              <Button variant="outline" className="border-navy text-navy hover:bg-navy/5 px-8 py-6 text-lg">
-                Seasonal Ingredients
-              </Button>
-            </div>
-          </div>
-          
-          <div className="relative h-[40vh] lg:h-[60vh] overflow-visible">
-            {ingredients.map((ingredient, index) => (
-              <div
-                key={index}
-                className="ingredient-item absolute rounded-full overflow-hidden shadow-xl"
-                style={{
-                  width: '180px',
-                  height: '180px',
-                  left: `calc(50% + ${ingredient.x}px)`,
-                  top: `calc(50% + ${ingredient.y}px)`,
-                  transform: `translateZ(${ingredient.z}px) rotateZ(${ingredient.rotation}deg)`,
-                  transitionDelay: `${ingredient.delay}s`,
-                  animation: 'float 6s ease-in-out infinite',
-                  animationDelay: `${ingredient.delay}s`
-                }}
-                data-speedx={ingredient.x * 0.05}
-                data-speedy={ingredient.y * 0.05}
-                data-speedz={ingredient.z}
-                data-rotation={ingredient.rotation}
-              >
-                <img
-                  src={ingredient.src}
-                  alt={ingredient.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce">
-        <p className="text-sm text-gray-600 mb-2">Scroll to explore</p>
-        <ChevronDown className="h-6 w-6 text-terracotta" />
-      </div>
-    </section>
+    <div className="relative h-screen flex flex-col justify-center items-center overflow-hidden border-8 border-red-500 bg-gradient-to-br from-yellow-200 to-pink-400" style={{ minHeight: '100vh' }}>
+      {/* DEBUG: If you see this, the NEW HERO is active! */}
+      <div className="absolute top-4 left-4 bg-black text-yellow-300 px-4 py-2 z-50 rounded-xl shadow-lg">NEW HERO ACTIVE</div>
+      {/* Washi paper animated background */}
+      <div className="bg-washi" style={{ background: "url('/washi-texture.png'), repeating-linear-gradient(45deg, #fffbe9 0 40px, #f6e7cb 40px 80px)", opacity: 0.5 }}></div>
+      {/* Gold flecks */}
+      {Array.from({ length: 10 }).map((_, i) => (
+        <div key={i} className="gold-fleck" style={{ left: `${Math.random()*100}%`, top: `${Math.random()*100}%`, animationDelay: `${i*1.2}s` }} />
+      ))}
+      {/* Parallax floating ingredients (unchanged, but can add framer-motion for subtle float) */}
+      <motion.div ref={parallaxRef} className="absolute inset-0 z-10 pointer-events-none">
+        {ingredients.map((ingredient, i) => (
+          <motion.img
+            key={ingredient.name}
+            src={ingredient.src}
+            alt={ingredient.name}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: [30, 0, 10, 0] }}
+            transition={{ delay: ingredient.delay, duration: 2.5, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+            className="absolute"
+            style={{ left: `${ingredient.x}%`, top: `${ingredient.y}%`, zIndex: ingredient.z, transform: `rotate(${ingredient.rotation}deg)` }}
+            width={80}
+          />
+        ))}
+      </motion.div>
+      {/* Animated Ink Title */}
+      <motion.h1 className="ink-title z-20" initial={{ opacity: 0, y: 40, filter: 'blur(16px)' }} animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }} transition={{ duration: 1.8, ease: [0.68,-0.55,0.27,1.55] }}>
+        Culinary Canvas: The Art of Japanese Seasons
+      </motion.h1>
+      {/* Subtitle (unchanged, but with glass-card effect) */}
+      <motion.p className="glass-card px-6 py-3 mt-6 text-xl text-center z-20" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 1.2 }}>
+        Experience the beauty of Japanese cuisine through the seasons.
+      </motion.p>
+      {/* Explore Button with glowing ripple effect */}
+      <motion.button className="mt-10 px-8 py-4 rounded-full text-lg font-bold text-white bg-gradient-to-r from-yellow-400 to-pink-500 shadow-lg ripple relative z-20"
+        whileHover={{ scale: 1.08, boxShadow: '0 0 24px 6px #ffd70066' }}
+        whileTap={{ scale: 0.96 }}>
+        Explore the Seasons
+      </motion.button>
+      {/* Animated Lotus Petals (unchanged, or add more with framer-motion) */}
+      <LotusPetals />
+    </div>
   );
 };
 

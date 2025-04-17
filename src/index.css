@@ -1,5 +1,5 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -45,6 +45,16 @@
     --sidebar-accent-foreground: 240 6% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217 91% 60%;
+
+    --season-spring: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    --season-summer: linear-gradient(135deg, #a1ffce 0%, #faffd1 100%);
+    --season-autumn: linear-gradient(135deg, #f6d365 0%, #fd6e6a 100%);
+    --season-winter: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+    --gold: #ffd700;
+    --washi-bg: url('/washi-texture.png');
+    --glass-bg: rgba(255,255,255,0.15);
+    --glass-blur: blur(10px);
+    --ink: #22223b;
   }
 
   .dark {
@@ -93,12 +103,95 @@
   }
 
   body {
-    @apply bg-background text-foreground font-montserrat;
+    font-family: 'Kiwi Maru', serif;
+    background: var(--season-spring), var(--washi-bg);
+    background-blend-mode: soft-light;
+    min-height: 100vh;
+    transition: background 1.5s cubic-bezier(0.77,0,0.175,1);
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-playfair;
   }
+}
+
+.bg-washi {
+  background: var(--washi-bg);
+  opacity: 0.5;
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+
+.gold-fleck {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: var(--gold);
+  border-radius: 50%;
+  opacity: 0.6;
+  filter: blur(2px);
+  animation: goldFleckFloat 12s infinite linear;
+}
+
+@keyframes goldFleckFloat {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-60px) scale(1.2); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+.ink-title {
+  font-family: 'Kiwi Maru', serif;
+  font-size: 3rem;
+  color: var(--ink);
+  text-shadow: 2px 4px 16px var(--gold), 0 2px 8px #0004;
+  letter-spacing: 0.04em;
+  animation: inkTitleReveal 1.8s cubic-bezier(.68,-0.55,.27,1.55);
+}
+
+@keyframes inkTitleReveal {
+  from { opacity: 0; filter: blur(16px); transform: scale(0.9) translateY(40px); }
+  to { opacity: 1; filter: blur(0); transform: scale(1) translateY(0); }
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+  border: 1px solid rgba(255,255,255,0.25);
+  transition: box-shadow 0.3s;
+}
+
+.glass-card:hover {
+  box-shadow: 0 16px 48px 0 rgba(31, 38, 135, 0.28);
+}
+
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+.ripple:after {
+  content: '';
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  left: 50%;
+  top: 50%;
+  pointer-events: none;
+  background: rgba(255, 215, 0, 0.2);
+  transform: translate(-50%, -50%) scale(0);
+  animation: rippleEffect 0.6s linear;
+}
+@keyframes rippleEffect {
+  to { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+}
+
+.season-transition {
+  transition: background 1.5s cubic-bezier(0.77,0,0.175,1);
 }
 
 /* Smooth animations and transitions */
@@ -182,4 +275,170 @@
 
 .img-hover:hover img {
   transform: scale(1.1);
+}
+
+/* NEW ANIMATIONS AND EFFECTS FOR HACKATHON */
+
+/* Fade in up animation */
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+/* Fade in down animation */
+@keyframes fade-in-down {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down 0.8s ease-out forwards;
+}
+
+/* Lotus petals floating animation */
+@keyframes lotus-float {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+  50% { transform: translateY(-15px) rotate(5deg); opacity: 0.6; }
+  100% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+}
+
+.lotus-petal {
+  animation: lotus-float 8s ease-in-out infinite;
+}
+
+/* Japanese style ink animation */
+@keyframes ink-spread {
+  0% { transform: scale(0.95); opacity: 0; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 0.6; }
+}
+
+.ink-animation {
+  animation: ink-spread 3s ease-out forwards;
+}
+
+/* Parallax scrolling effect */
+.parallax {
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+}
+
+/* Glass card effect */
+.glass-card {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+/* Elegant text reveal animation */
+@keyframes text-reveal {
+  0% { clip-path: inset(0 100% 0 0); }
+  100% { clip-path: inset(0 0 0 0); }
+}
+
+.text-reveal {
+  animation: text-reveal 1s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+/* Japanese-inspired wave animation */
+@keyframes wave-animation {
+  0% { transform: translateX(0) translateY(0); }
+  50% { transform: translateX(-10px) translateY(5px); }
+  100% { transform: translateX(0) translateY(0); }
+}
+
+.japanese-wave {
+  animation: wave-animation 8s ease-in-out infinite;
+}
+
+/* Zen garden ripple effect */
+@keyframes ripple {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+.zen-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  animation: ripple 1.5s linear;
+}
+
+/* Scroll indicator animation */
+@keyframes scroll-indicator {
+  0% { transform: translateY(0); opacity: 0.8; }
+  50% { transform: translateY(10px); opacity: 0.4; }
+  100% { transform: translateY(0); opacity: 0.8; }
+}
+
+.scroll-indicator {
+  animation: scroll-indicator 2s ease-in-out infinite;
+}
+
+/* Japanese-inspired background pattern */
+.japanese-pattern {
+  background-color: #111;
+  background-image: 
+    radial-gradient(#f8b195 2px, transparent 2px),
+    radial-gradient(#f8b195 2px, transparent 2px);
+  background-size: 40px 40px;
+  background-position: 0 0, 20px 20px;
+  opacity: 0.1;
+}
+
+/* Dark lotus background for hero section */
+.dark-lotus-bg {
+  background-color: #111;
+  background-image: url('/images/lotus-dark-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  position: relative;
+}
+
+/* Overlay for dark lotus background */
+.dark-lotus-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%);
+  z-index: 1;
+}
+
+/* Golden accents for Japanese theme */
+.golden-accent {
+  color: #e6c068;
+  text-shadow: 0 0 10px rgba(230, 192, 104, 0.5);
+}
+
+/* Brush stroke text effect */
+.brush-stroke {
+  position: relative;
+}
+
+.brush-stroke::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: #e6c068;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s ease;
+}
+
+.brush-stroke:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }

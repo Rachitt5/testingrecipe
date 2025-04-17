@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { 
@@ -16,7 +15,7 @@ const Header = () => {
     <header className="py-6 px-8 flex items-center justify-between bg-terracotta text-white fixed top-0 left-0 w-full z-50">
       <div className="flex items-center">
         <h1 className="text-2xl md:text-3xl font-bold font-playfair">
-          Seasonal Plates
+          Rachit's Recipe Blog
         </h1>
       </div>
       <nav className="hidden md:flex space-x-8">
@@ -377,13 +376,22 @@ const RecipePage = () => {
       <Header />
       
       {/* Hero Section with Parallax */}
-      <div className="relative h-screen overflow-hidden bg-terracotta">
-        <div className="absolute inset-0 z-0 bg-black/30"></div>
+      <div className="relative h-screen overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="/ae2.jpg" 
+            alt="Hero Background" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/40"></div>
+        </div>
+        
         <div className="absolute inset-0 flex items-center">
-          <div className="container mx-auto px-4 flex flex-col md:flex-row items-center">
-            <div className="w-full md:w-1/2 z-10 text-white mb-10 md:mb-0">
+          <div className="container mx-auto px-4">
+            <div className="max-w-2xl mx-auto text-center z-10 relative">
               <motion.p 
-                className="text-lg font-medium mb-4 opacity-80"
+                className="text-lg font-medium mb-4 text-white/90"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -392,7 +400,7 @@ const RecipePage = () => {
               </motion.p>
               
               <motion.h1
-                className="text-6xl font-playfair font-bold mb-6"
+                className="text-6xl font-playfair font-bold mb-6 bg-gradient-to-r from-white via-cream to-white bg-clip-text text-transparent drop-shadow-lg tracking-wider"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
@@ -401,45 +409,13 @@ const RecipePage = () => {
               </motion.h1>
               
               <motion.p
-                className="text-xl mb-8 opacity-90"
+                className="text-xl mb-8 text-white font-medium italic"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
               >
-                Feel the taste of the most delicious sushi here
+                Come see my recipe of sushi and fall in love with every bite
               </motion.p>
-              
-              <motion.div 
-                className="grid grid-cols-2 gap-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-              >
-                <div className="flex items-center">
-                  <div className="w-6 h-6 rounded-full bg-cream text-terracotta flex items-center justify-center mr-2">
-                    <span className="text-sm">1</span>
-                  </div>
-                  <span>Make Sushi</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-6 h-6 rounded-full bg-cream text-terracotta flex items-center justify-center mr-2">
-                    <span className="text-sm">2</span>
-                  </div>
-                  <span>Nigiri Sushi</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-6 h-6 rounded-full bg-cream text-terracotta flex items-center justify-center mr-2">
-                    <span className="text-sm">3</span>
-                  </div>
-                  <span>Oshizushi</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-6 h-6 rounded-full bg-cream text-terracotta flex items-center justify-center mr-2">
-                    <span className="text-sm">4</span>
-                  </div>
-                  <span>Temaki Sushi</span>
-                </div>
-              </motion.div>
               
               <motion.div 
                 className="mt-10"
@@ -454,20 +430,6 @@ const RecipePage = () => {
                   Explore Food
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-              </motion.div>
-            </div>
-            <div className="w-full md:w-1/2 z-10 flex justify-center">
-              <motion.div
-                className="relative w-80 h-80"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, delay: 0.4 }}
-              >
-                <img
-                  src="public/lovable-uploads/e3a85ed1-3911-44c7-b5a0-77f780931944.png"
-                  alt="Sushi Illustration"
-                  className="w-full h-full object-contain"
-                />
               </motion.div>
             </div>
           </div>
@@ -725,7 +687,7 @@ const RecipePage = () => {
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-8 md:mb-0">
-              <h3 className="text-2xl font-playfair font-bold mb-2 text-cream">Seasonal Plates</h3>
+              <h3 className="text-2xl font-playfair font-bold mb-2 text-cream">Rachit's Recipe Blog</h3>
               <p className="text-white/70">Culinary Journeys</p>
             </div>
             
@@ -743,7 +705,7 @@ const RecipePage = () => {
           </div>
           
           <div className="mt-8 pt-8 border-t border-white/20 text-center text-white/60 text-sm">
-            <p>© 2025 Seasonal Plates. All rights reserved.</p>
+            <p> {new Date().getFullYear()} Rachit's Recipe Blog. All rights reserved.</p>
           </div>
         </div>
       </footer>

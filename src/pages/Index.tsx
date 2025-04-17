@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -56,7 +55,7 @@ const Index = () => {
 
   const JapaneseHighlight = () => {
     return (
-      <section className="py-20 relative overflow-hidden bg-cream">
+      <section className="py-20 relative overflow-hidden bg-gradient-to-br from-cream to-pink-50">
         <CherryBlossoms />
         
         <div className="container mx-auto px-4">
@@ -66,14 +65,14 @@ const Index = () => {
             <div className="h-0.5 w-16 bg-terracotta"></div>
           </div>
           
-          <h2 className="text-4xl md:text-5xl font-playfair font-bold text-center text-navy mb-12">
+          <h2 className="text-4xl md:text-5xl font-playfair font-bold text-center text-navy mb-12 animate-fade-in-up">
             Featured Japanese Recipe
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <motion.div
-              whileHover={{ scale: 1.02 }}
-              className="relative rounded-xl overflow-hidden shadow-lg"
+              whileHover={{ scale: 1.03, boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}
+              className="relative rounded-2xl overflow-hidden shadow-xl transition-all duration-500"
             >
               <img 
                 src="public/lovable-uploads/e4b25889-3afa-4b69-ad31-0b51a860ff5c.png" 
@@ -82,21 +81,21 @@ const Index = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
                 <div className="p-8">
-                  <span className="bg-terracotta text-white px-3 py-1 rounded-full text-sm font-medium mb-4 inline-block">
+                  <span className="bg-terracotta text-white px-3 py-1 rounded-full text-sm font-medium mb-4 inline-block shadow-lg">
                     Seasonal Recipe
                   </span>
-                  <h3 className="text-2xl md:text-3xl font-bold text-white">
+                  <h3 className="text-2xl md:text-3xl font-bold text-white drop-shadow-md">
                     Cucumber Wrapped Sushi
                   </h3>
-                  <p className="text-white/80 mt-2">
+                  <p className="text-white/80 mt-2 drop-shadow-md">
                     A refreshing twist on traditional maki
                   </p>
                 </div>
               </div>
             </motion.div>
             
-            <div className="space-y-6 px-4 md:px-8">
-              <div className="inline-block bg-sage/20 px-3 py-1 rounded-full text-sage font-medium">
+            <div className="space-y-6 px-4 md:px-8 animate-fade-in-up">
+              <div className="inline-block bg-sage/20 px-3 py-1 rounded-full text-sage font-medium shadow-sm backdrop-blur-sm">
                 Japanese Cuisine
               </div>
               
@@ -104,26 +103,26 @@ const Index = () => {
                 Cucumber Wrapped Sushi (Kappa Maki)
               </h3>
               
-              <p className="text-gray-700">
+              <p className="text-gray-700 backdrop-blur-sm bg-white/30 p-4 rounded-lg shadow-sm">
                 Discover our beautiful cucumber wrapped sushi rolls, a perfect light meal for summer. This healthier alternative uses fresh cucumber instead of nori for a crisp, refreshing taste that pairs perfectly with salmon and avocado.
               </p>
               
               <div className="flex flex-wrap gap-4">
-                <div className="flex items-center">
+                <div className="flex items-center bg-white/50 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
                   <div className="w-3 h-3 bg-terracotta rounded-full mr-2"></div>
                   <span className="text-sm text-gray-600">Prep Time: 30 mins</span>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center bg-white/50 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
                   <div className="w-3 h-3 bg-sage rounded-full mr-2"></div>
                   <span className="text-sm text-gray-600">Difficulty: Medium</span>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center bg-white/50 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
                   <div className="w-3 h-3 bg-navy rounded-full mr-2"></div>
                   <span className="text-sm text-gray-600">Servings: 4</span>
                 </div>
               </div>
               
-              <Button className="bg-terracotta hover:bg-terracotta/90 text-white" asChild>
+              <Button className="bg-terracotta hover:bg-terracotta/90 text-white rounded-full shadow-lg transition-all duration-300 hover:scale-105" asChild>
                 <Link to="/cucumber-sushi">
                   View Complete Recipe
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -137,14 +136,24 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-white via-cream to-pink-50">
       <Navbar />
       <Hero />
-      <JapaneseHighlight />
-      <FeaturedRecipes />
-      <SeasonalCategories />
-      <IngredientSpotlight />
-      <CallToAction />
+      <div className="relative z-10">
+        <JapaneseHighlight />
+      </div>
+      <div className="relative z-10 animate-fade-in-up">
+        <FeaturedRecipes />
+      </div>
+      <div className="relative z-10 animate-fade-in-up">
+        <SeasonalCategories />
+      </div>
+      <div className="relative z-10 animate-fade-in-up">
+        <IngredientSpotlight />
+      </div>
+      <div className="relative z-10 animate-fade-in-up">
+        <CallToAction />
+      </div>
       <Footer />
     </div>
   );

@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { Instagram, Twitter, Facebook, Mail, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,7 +11,7 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="space-y-4">
             <h2 className="text-2xl font-playfair font-bold text-navy">
-              Seasonal <span className="text-terracotta">Plates</span>
+              Rachit's <span className="text-terracotta">Recipe Blog</span>
             </h2>
             <p className="text-sm text-gray-600 max-w-xs">
               Discover recipes that celebrate each season's best ingredients through immersive culinary experiences.
@@ -109,7 +108,7 @@ const Footer = () => {
         <div className="pt-8 border-t border-gray-200">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-xs text-gray-500">
-              © {new Date().getFullYear()} Seasonal Plates. All rights reserved.
+              &copy; {new Date().getFullYear()} Rachit's Recipe Blog. All rights reserved.
             </p>
             <div className="flex space-x-4">
               <Link to="/privacy" className="text-xs text-gray-500 hover:text-terracotta">
